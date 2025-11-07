@@ -43,7 +43,15 @@ h3 { margin-top:16px; font-size:1.2em; }
   gap:6px;
   margin:14px 0;
 }
-.level-grid .button-small { background:#2e2e2e; border:1px solid #888; padding:10px 0; font-size:18px; }
+
+.level-grid .button-small {
+  background:#2e2e2e;
+  border:1px solid #888;
+  padding:12px 0;
+  font-size:18px;
+  width:100%; /* これで grid の幅に自動フィット */
+  border-radius:10px;
+}
 
 /* 小さい画面は縦並び */
 @media (max-width:480px) {
