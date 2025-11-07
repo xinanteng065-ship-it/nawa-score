@@ -23,28 +23,29 @@ h3 { margin-top:16px; font-size:1.2em; }
 .section { display:none; }
 .section.active { display:block; }
 
-button {
+/* Difficulty / プレゼン用ボタン */
+.button-small {
   background:#445;
   border:none;
-  padding:12px 16px;
+  padding:10px 14px;
   border-radius:10px;
   color:white;
-  margin:6px 0;
+  margin:5px 0;
   font-size:20px;
-  width:85%;
-  max-width:280px;
+  width:72%;
+  max-width:220px;
 }
-button:active { background:#556; }
+.button-small:active { background:#556; }
 
 .level-grid {
   display:grid;
   grid-template-columns:repeat(3, 1fr);
-  gap:8px;
-  margin:16px 0;
+  gap:6px;
+  margin:14px 0;
 }
-.level-grid button { background:#2e2e2e; border:1px solid #888; padding:12px 0; font-size:18px; }
+.level-grid .button-small { background:#2e2e2e; border:1px solid #888; padding:10px 0; font-size:18px; }
 
-/* 小さい画面は縦並びに */
+/* 小さい画面は縦並び */
 @media (max-width:480px) {
   .level-grid {
     grid-template-columns:1fr;
@@ -64,6 +65,7 @@ button:active { background:#556; }
   width:48%;
 }
 
+/* MISS/BREAK用大きめボタン */
 .big-btn {
   background:#8ab4f8;
   color:#222;
@@ -95,19 +97,19 @@ video { width:100%; height:auto; border-radius:10px; margin-top:10px; }
 <h3>① Difficulty (技点)</h3>
 
 <div class="level-grid">
-<button onclick="addDiff('1')">Lv1</button>
-<button onclick="addDiff('0.5')">Lv0.5</button>
-<button onclick="addDiff('4')">Lv4</button>
-<button onclick="addDiff('2')">Lv2</button>
-<button onclick="addDiff('7')">Lv7</button>
-<button onclick="addDiff('5')">Lv5</button>
-<button onclick="addDiff('3')">Lv3</button>
-<button onclick="addDiff('8')">Lv8</button>
-<button onclick="addDiff('6')">Lv6</button>
+<button class="button-small" onclick="addDiff('1')">Lv1</button>
+<button class="button-small" onclick="addDiff('0.5')">Lv0.5</button>
+<button class="button-small" onclick="addDiff('4')">Lv4</button>
+<button class="button-small" onclick="addDiff('2')">Lv2</button>
+<button class="button-small" onclick="addDiff('7')">Lv7</button>
+<button class="button-small" onclick="addDiff('5')">Lv5</button>
+<button class="button-small" onclick="addDiff('3')">Lv3</button>
+<button class="button-small" onclick="addDiff('8')">Lv8</button>
+<button class="button-small" onclick="addDiff('6')">Lv6</button>
 </div>
 
 <div class="value-display">合計: <span id="diffTotal">0.00</span></div>
-<button onclick="next(2)">次へ ➡</button>
+<button class="button-small" onclick="next(2)">次へ ➡</button>
 </div>
 
 <!-- Step 2 -->
@@ -125,8 +127,8 @@ video { width:100%; height:auto; border-radius:10px; margin-top:10px; }
 <button class="big-btn" onclick="breakCount++;">BREAK</button>
 
 <p>ミス: <span id="missDisp">0</span>　ブレイク: <span id="breakDisp">0</span></p>
-<button onclick="next(1)">⬅ 戻る</button>
-<button onclick="next(3)">次へ ➡</button>
+<button class="button-small" onclick="next(1)">⬅ 戻る</button>
+<button class="button-small" onclick="next(3)">次へ ➡</button>
 </div>
 
 <!-- Step 3 -->
@@ -139,15 +141,15 @@ video { width:100%; height:auto; border-radius:10px; margin-top:10px; }
 <label><input type="checkbox" class="re"> ロープ操作</label><br>
 </div>
 
-<button onclick="next(2)">⬅ 戻る</button>
-<button onclick="calcFinal()">最終得点 ✅</button>
+<button class="button-small" onclick="next(2)">⬅ 戻る</button>
+<button class="big-btn" onclick="calcFinal()">最終得点 ✅</button>
 </div>
 
 <!-- Step 4 -->
 <div id="s4" class="section">
 <h3>🏁 Final Score</h3>
 <div class="result-score" id="result"></div>
-<button onclick="location.reload()">新しく採点する</button>
+<button class="big-btn" onclick="location.reload()">新しく採点する</button>
 </div>
 
 </div>
