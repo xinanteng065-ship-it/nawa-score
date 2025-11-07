@@ -12,7 +12,7 @@ body {
   margin:0;
   text-align:center;
 }
-h2, h3 { margin-top:18px; }
+h2, h3 { margin-top:20px; font-size:1.5em; }
 
 .container {
   max-width:600px;
@@ -25,57 +25,60 @@ h2, h3 { margin-top:18px; }
 button {
   background:#445;
   border:none;
-  padding:12px 18px;
-  border-radius:8px;
+  padding:18px 20px;
+  border-radius:12px;
   color:white;
-  margin:5px;
-  font-size:18px;
-  min-width:70px;
+  margin:8px 0;
+  font-size:24px;
+  width:90%;
+  max-width:350px;
 }
 button:active { background:#556; }
 
 .level-grid {
   display:grid;
   grid-template-columns:repeat(3, 1fr);
-  gap:10px;
-  margin:15px 0;
+  gap:12px;
+  margin:20px 0;
 }
-.level-grid button { background:#2e2e2e; border:1px solid #888; }
+.level-grid button { background:#2e2e2e; border:2px solid #888; font-size:22px; padding:18px 0; }
 
-/* スマホ縦画面では縦並びに */
+/* 小さい画面は縦並びに */
 @media (max-width:480px) {
   .level-grid {
     grid-template-columns:1fr;
   }
 }
 
-.value-display { font-size:22px; margin-top:10px; }
+.value-display { font-size:26px; margin-top:15px; }
 
-.pres-row { display:flex; justify-content:space-between; margin:10px 0; flex-wrap:wrap; }
+.pres-row { display:flex; justify-content:space-between; margin:12px 0; flex-wrap:wrap; font-size:22px; }
 .pres-btn {
   background:#333;
-  border:1px solid #8ab4f8;
-  border-radius:8px;
-  padding:8px 16px;
-  font-size:20px;
+  border:2px solid #8ab4f8;
+  border-radius:12px;
+  padding:10px 18px;
+  font-size:22px;
   margin-top:5px;
+  width:45%;
 }
+
 .big-btn {
   background:#8ab4f8;
   color:#222;
-  width:90%;
-  max-width:300px;
-  height:70px;
-  font-size:24px;
-  border-radius:12px;
-  margin:14px auto;
+  width:95%;
+  max-width:380px;
+  height:80px;
+  font-size:28px;
+  border-radius:14px;
+  margin:16px auto;
 }
 
-.checkbox-list { text-align:left; margin-left:10%; font-size:18px; }
+.checkbox-list { text-align:left; margin-left:10%; font-size:22px; }
 
-.result-score { font-size:48px; margin-top:20px; color:#8ab4f8; word-break:break-word; }
+.result-score { font-size:56px; margin-top:25px; color:#8ab4f8; word-break:break-word; }
 
-video { width:100%; height:auto; border-radius:10px; margin-top:10px; }
+video { width:100%; height:auto; border-radius:12px; margin-top:15px; }
 </style>
 </head>
 <body>
