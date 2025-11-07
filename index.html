@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>縄すこ</title>
+<style>
+body { background:#222; color:#fff; font-family:sans-serif; margin:0; text-align:center; }
+h2, h3 { margin-top:18px; }
+
+.container { max-width:600px; margin:auto; padding:10px; }
+.section { display:none; }
+.section.active { display:block; }
+
+button {
+  background:#445;
+  border:none;
+  padding:10px 16px;
+  border-radius:6px;
+  color:white;
+  margin:5px;
+  font-size:16px;
+}
+button:active { background:#556; }
+
+.level-grid {
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:8px;
+  margin:15px 0;
+}
+.level-grid button { background:#2e2e2e; border:1px solid #888; }
+
+.value-display { font-size:20px; margin-top:10px; }
+
+.pres-row { display:flex; justify-content:space-between; margin:8px 0; }
+.pres-btn {
+  background:#333; border:1px solid #8ab4f8; border-radius:6px;
+  padding:6px 12px; font-size:18px;
+}
+.big-btn {
+  background:#8ab4f8; color:#222; width:200px; height:70px; font-size:26px;
+  border-radius:10px; margin:14px auto;
+}
+
+.checkbox-list { text-align:left; margin-left:20%; }
+
+.result-score { font-size:42px; margin-top:20px; color:#8ab4f8; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h2>🎥 演技動画</h2>
+<input type="file" id="videoUpload" accept="video/*"><br><br>
+<video id="video" width="100%" controls></video>
+
+<!-- Step 1 -->
+<div id="s1" class="section active">
+<h3>① Difficulty (技点)</h3>
+
+<div class="level-grid">
+<button onclick="addDiff('1')">Lv1</button>
+<button onclick="addDiff('0.5')">Lv0.5</button>
+<button onclick="addDiff('4')">Lv4</button>
+
+<button onclick="addDiff('2')">Lv2</button>
+<button onclick="addDiff('7')">Lv7</button>
+<button onclick="addDiff('5')">Lv5</button>
+
+<button onclick="addDiff('3')">Lv3</button>
+<button onclick="addDiff('8')">Lv8</button>
+<button onclick="addDiff('6')">Lv6</button>
+</div>
+
+<div class="value-display">合計: <span id="diffTotal">0.00</span></div>
+
+<button onclick="next(2)">次へ ➡</button>
+</div>
+
+<!-- Step 2 -->
+<div id="s2" class="section">
+<h3>② Presentation (表現)</h3>
+
+<div class="pres-row"><span>音楽性</span><span><button class="pres-btn" onclick="adj('music',1)">+</button><button class="pres-btn" onclick="adj('music',-1)">-</button></span></div>
+<div class="pres-row"><span>フォーム</span><span><button class="pres-btn" onclick="adj('form',1)">+</button><button class="pres-btn" onclick="adj('form',-1)">-</button></span></div>
+<div class="pres-row"><span>創造性</span><span><button class="pres-btn" onclick="adj('creative',1)">+</button><button class="pres-btn" onclick="adj('creative',-1)">-</button></span></div>
+<div class="pres-row"><span>エンタメ</span><span><button class="pres-btn" onclick="adj('ent',1)">+</button><button class="pres-btn" onclick="adj('ent',-1)">-</button></span></div>
+<div class="pres-row"><span>多様性</span><span><button class="pres-btn" onclick="adj('var',1)">+</button><button class="pres-btn" onclick="adj('var',-1)">-</button></span></div>
+
+<h3>ミス / ブレイク</h3>
+<button class="big-btn" onclick="missCount++;">MISS</button>
+<button class="big-btn" onclick="breakCount++;">BREAK</button>
+
+<p>ミス: <span id="missDisp">0</span>　ブレイク: <span id="breakDisp">0</span></p>
+
+<button onclick="next(1)">⬅ 戻る</button>
+<button onclick="next(3)">次へ ➡</button>
+</div>
+
+<!-- Step 3 -->
+<div id="s3" class="section">
+<h3>③ Required Elements</h3>
+
+<div class="checkbox-list">
+<label><input type="checkbox" class="re"> パワー/体操</label><br>
+<label><input type="checkbox" class="re"> 多重</label><br>
+<label><input type="checkbox" class="re"> ロープ操作</label><br>
+</div>
+
+<button onclick="next(2)">⬅ 戻る</button>
+<button onclick="calcFinal()">最終得点 ✅</button>
+</div>
+
+<!-- Step 4 -->
+<div id="s4" class="section">
+<h3>🏁 Final Score</h3>
+<div class="result-score" id="result"></div>
+<button onclick="location.reload()">新しく採点する</button>
+</div>
+
+</div>
+
+<script>
+// video
+const v=document.getElementById("video");
+videoUpload.onchange=e=>v.src=URL.createObjectURL(e.target.files[0]);
+
+// navigation
+function next(n){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove("active"));
+  document.getElementById("s"+n).classList.add("active");
+}
+
+// Difficulty
+let diff=0;
+const diffTable={"0.5":0.12,"1":0.15,"2":0.23,"3":0.34,"4":0.51,"5":0.76,"6":1.14,"7":1.71,"8":2.56};
+function addDiff(l){ diff+=diffTable[l]; diffTotal.textContent=diff.toFixed(2); }
+
+// Presentation
+let score={music:12,form:12,creative:12,ent:12,var:12};
+function adj(k,v){ score[k]=Math.max(0,Math.min(24,score[k]+v)); }
+let missCount=0,breakCount=0;
+setInterval(()=>{ missDisp.textContent=missCount; breakDisp.textContent=breakCount; },200);
+
+// Final calc
+function calcFinal(){
+  let D=diff/3;
+  let P=(score.music*0.20+score.form*0.25+score.creative*0.15+score.ent*0.25+score.var*0.15)/24;
+  let re=document.querySelectorAll(".re:checked").length;
+  let Q=1-((3-re)*0.025);
+  let M=missCount===0?0:missCount===1?0.05:missCount===2?0.125:missCount===3?0.225:0.225+(missCount-3)*0.10;
+  let B=breakCount*0.05;
+  result.textContent=(D*(1+P)*Q*(1-(M+B))).toFixed(2);
+  next(4);
+}
+</script>
+</body>
+</html>
