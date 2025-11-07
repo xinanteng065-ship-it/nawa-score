@@ -2,91 +2,67 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>縄すこ</title>
+<title>縄すこ JJRU Ver.4.2.0 自動計算</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body {
-  background:#222;
-  color:#fff;
-  font-family:sans-serif;
-  margin:0;
-  text-align:center;
-}
-h2 { margin-top:18px; font-size:1.4em; }
-h3 { margin-top:16px; font-size:1.2em; }
+body { background:linear-gradient(135deg,#0a0a1a,#11112a); color:#eee; font-family:sans-serif; margin:0; text-align:center; }
+h2 { margin-top:18px; font-size:1.5em; color:#00d4ff; text-shadow:0 0 5px #00d4ff;}
+h3 { margin-top:16px; font-size:1.2em; color:#fff; text-shadow:0 0 2px #00d4ff; }
 
-.container {
-  max-width:600px;
-  margin:auto;
-  padding:10px;
-}
+.container { max-width:600px; margin:auto; padding:10px; }
 .section { display:none; }
 .section.active { display:block; }
 
-button {
-  background:#445;
-  border:none;
-  padding:12px 16px;
-  border-radius:10px;
-  color:white;
-  margin:6px 0;
-  font-size:20px;
-  width:85%;
-  max-width:280px;
-}
-button:active { background:#556; }
+/* 共通ボタン */
+button { background: linear-gradient(to bottom,#222 0%,#444 100%); border:none; border-radius:8px; color:white; margin:5px; transition: all 0.2s; cursor:pointer; }
+button:hover { background: linear-gradient(to bottom,#333 0%,#555 100%); }
+button:active { transform:scale(0.95); background:#666; }
 
-.level-grid {
-  display:grid;
-  grid-template-columns:repeat(3, 1fr);
-  gap:6px;
-  margin:10px 0;
-}
-.level-grid button { background:#2e2e2e; border:1px solid #888; padding:9px 0; font-size:18px; }
+/* Difficulty */
+.level-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:12px 0; }
+.level-grid button { width:150px; height:150px; font-size:12px; padding:0; background:#11112a; border:1px solid #00d4ff; color:#00d4ff; }
 
-.value-display { font-size:22px; margin-top:12px; }
+/* Difficulty 合計表示 */
+.value-display { font-size:20px; margin-top:10px; color:#00d4ff; }
 
-.pres-row { display:flex; justify-content:space-between; margin:10px 0; flex-wrap:wrap; font-size:20px; }
-.pres-btn {
-  background:#333;
-  border:1px solid #8ab4f8;
-  border-radius:10px;
-  padding:8px 14px;
-  font-size:20px;
-  margin-top:4px;
-  width:48%;
-}
+/* Presentation */
+.pres-row { display:flex; justify-content:space-between; align-items:center; margin:8px 0; font-size:18px; flex-wrap:wrap; }
+.pres-btn { background:#11112a; border:1px solid #00d4ff; border-radius:6px; padding:6px 12px; font-size:18px; margin-left:4px; margin-top:4px; color:#00d4ff;}
+.pres-btn:hover { background:#00d4ff; color:#11112a;}
+.pres-score { font-weight:bold; margin-left:8px; color:#00ffff; text-shadow:0 0 3px #00ffff; }
 
-.big-btn {
-  background:#8ab4f8;
-  color:#222;
-  width:90%;
-  max-width:300px;
-  height:65px;
-  font-size:24px;
-  border-radius:12px;
-  margin:12px auto;
-}
+/* MISS / BREAK */
+.count-box { margin:15px 0; }
+.big-btn { background: linear-gradient(to bottom,#00d4ff 0%,#00a0cc 100%); color:#11112a; padding:12px 18px; border-radius:10px; font-size:20px; }
+.mini-btn { background:#11112a; border:1px solid #00d4ff; padding:6px 10px; border-radius:8px; font-size:16px; color:#00d4ff; }
+.mini-btn:hover { background:#00d4ff; color:#11112a; }
 
-.checkbox-list { text-align:left; margin-left:10%; font-size:20px; }
+/* Required Elements */
+.checkbox-list { text-align:left; margin-left:10%; color:#fff; }
+.result-score { font-size:48px; margin-top:20px; color:#00d4ff; text-shadow:0 0 8px #00d4ff; word-break:break-word; }
+video { width:100%; border-radius:10px; margin-top:8px; }
 
-.result-score { font-size:48px; margin-top:20px; color:#8ab4f8; word-break:break-word; }
+/* ナビボタン */
+.nav-btn { background:#11112a; color:#00d4ff; border:1px solid #00d4ff; border-radius:8px; padding:10px 18px; font-size:18px; margin:10px 5px; }
+.nav-left { float:left; }
+.nav-right { float:right; }
+.nav-clear { clear:both; }
 
-video { width:100%; height:auto; border-radius:10px; margin-top:10px; }
+/* タブ切替 */
+.tab-btn { padding:6px 12px; border-radius:6px; border:1px solid #00d4ff; background:#11112a; color:#00d4ff; margin:4px; cursor:pointer; }
+.tab-btn.active { background:#00d4ff; color:#11112a; }
 </style>
 </head>
 <body>
-
 <div class="container">
 
 <h2>🎥 演技動画</h2>
 <input type="file" id="videoUpload" accept="video/*"><br><br>
 <video id="video" controls></video>
 
-<!-- Step 1 -->
+<!-- Step 1: Difficulty -->
 <div id="s1" class="section active">
 <h3>① Difficulty (技点)</h3>
-
 <div class="level-grid">
 <button onclick="addDiff('1')">Lv1</button>
 <button onclick="addDiff('0.5')">Lv0.5</button>
@@ -98,48 +74,132 @@ video { width:100%; height:auto; border-radius:10px; margin-top:10px; }
 <button onclick="addDiff('8')">Lv8</button>
 <button onclick="addDiff('6')">Lv6</button>
 </div>
-
 <div class="value-display">合計: <span id="diffTotal">0.00</span></div>
-<button onclick="next(2)">次へ ➡</button>
+<button onclick="resetDiff()">リセット</button>
+<div class="nav-clear"></div>
+<button class="nav-btn nav-left" onclick="next(0)">戻る</button>
+<button class="nav-btn nav-right" onclick="next(2)">次へ</button>
+<div class="nav-clear"></div>
 </div>
 
-<!-- Step 2 -->
+<!-- Step 2: Presentation -->
 <div id="s2" class="section">
 <h3>② Presentation (表現)</h3>
-
-<div class="pres-row"><span>音楽性</span><span><button class="pres-btn" onclick="adj('music',1)">+</button><button class="pres-btn" onclick="adj('music',-1)">-</button></span></div>
-<div class="pres-row"><span>フォーム</span><span><button class="pres-btn" onclick="adj('form',1)">+</button><button class="pres-btn" onclick="adj('form',-1)">-</button></span></div>
-<div class="pres-row"><span>創造性</span><span><button class="pres-btn" onclick="adj('creative',1)">+</button><button class="pres-btn" onclick="adj('creative',-1)">-</button></span></div>
-<div class="pres-row"><span>エンタメ</span><span><button class="pres-btn" onclick="adj('ent',1)">+</button><button class="pres-btn" onclick="adj('ent',-1)">-</button></span></div>
-<div class="pres-row"><span>多様性</span><span><button class="pres-btn" onclick="adj('var',1)">+</button><button class="pres-btn" onclick="adj('var',-1)">-</button></span></div>
-
-<h3>ミス / ブレイク</h3>
-<button class="big-btn" onclick="missCount++;">MISS</button>
-<button class="big-btn" onclick="breakCount++;">BREAK</button>
-
-<p>ミス: <span id="missDisp">0</span>　ブレイク: <span id="breakDisp">0</span></p>
-<button onclick="next(1)">⬅ 戻る</button>
-<button onclick="next(3)">次へ ➡</button>
+<div class="pres-row">音楽性 
+  <span id="disp_music" class="pres-score">0</span>
+  <span>
+    <button class="pres-btn" onclick="adjPres('music',1)">➕</button>
+    <button class="pres-btn" onclick="adjPres('music',-2)">➖</button>
+  </span>
+</div>
+<div class="pres-row">フォーム 
+  <span id="disp_form" class="pres-score">0</span>
+  <span>
+    <button class="pres-btn" onclick="adjPres('form',1)">➕</button>
+    <button class="pres-btn" onclick="adjPres('form',-2)">➖</button>
+  </span>
+</div>
+<div class="pres-row">創造性 
+  <span id="disp_creative" class="pres-score">0</span>
+  <span>
+    <button class="pres-btn" onclick="adjPres('creative',1)">➕</button>
+    <button class="pres-btn" onclick="adjPres('creative',-2)">➖</button>
+  </span>
+</div>
+<div class="pres-row">エンタメ 
+  <span id="disp_ent" class="pres-score">0</span>
+  <span>
+    <button class="pres-btn" onclick="adjPres('ent',1)">➕</button>
+    <button class="pres-btn" onclick="adjPres('ent',-2)">➖</button>
+  </span>
+</div>
+<div class="pres-row">多様性 
+  <span id="disp_var" class="pres-score">0</span>
+  <span>
+    <button class="pres-btn" onclick="adjPres('var',1)">➕</button>
+    <button class="pres-btn" onclick="adjPres('var',-2)">➖</button>
+  </span>
+</div>
+<div style="margin-top:10px;">現在のプレゼン得点: <span id="presTotal">0.00</span> / 1.20</div>
+<button onclick="resetPres()">リセット</button>
+<div class="nav-clear"></div>
+<button class="nav-btn nav-left" onclick="next(1)">戻る</button>
+<button class="nav-btn nav-right" onclick="next(3)">次へ</button>
+<div class="nav-clear"></div>
 </div>
 
-<!-- Step 3 -->
+<!-- Step 3: Miss / Break -->
 <div id="s3" class="section">
-<h3>③ Required Elements</h3>
-
-<div class="checkbox-list">
-<label><input type="checkbox" class="re"> パワー/体操</label><br>
-<label><input type="checkbox" class="re"> 多重</label><br>
-<label><input type="checkbox" class="re"> ロープ操作</label><br>
+<h3>③ ミス / ブレイク</h3>
+<div class="count-box">
+<p>MISS: <span id="missDisp">0</span></p>
+<button class="big-btn" onclick="logMiss()">+1</button>
+<button class="mini-btn" onclick="undoMiss()">-1</button>
+</div>
+<div class="count-box">
+<p>BREAK: <span id="breakDisp">0</span></p>
+<button class="big-btn" onclick="logBreak()">+1</button>
+<button class="mini-btn" onclick="undoBreak()">-1</button>
+</div>
+<div class="nav-clear"></div>
+<button class="nav-btn nav-left" onclick="next(2)">戻る</button>
+<button class="nav-btn nav-right" onclick="next(4)">次へ</button>
+<div class="nav-clear"></div>
 </div>
 
-<button onclick="next(2)">⬅ 戻る</button>
-<button onclick="calcFinal()">最終得点 ✅</button>
-</div>
-
-<!-- Step 4 -->
+<!-- Step 4: Required Elements -->
 <div id="s4" class="section">
+<h3>④ Required Elements</h3>
+<p>
+<button class="tab-btn active" id="juniorTab" onclick="switchTab('junior')">ジュニア 4カウント</button>
+<button class="tab-btn" id="seniorTab" onclick="switchTab('senior')">シニア 6カウント</button>
+</p>
+
+<div id="reJunior">
+<p>Power Moves 現在: <span id="rePower">0</span>/4</p>
+<button class="pres-btn" onclick="adjRE('power',1)">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('power',0.5)">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('power',-0.5)">取消 -0.5</button>
+
+<p>Multiples 現在: <span id="reMulti">0</span>/4</p>
+<button class="pres-btn" onclick="adjRE('multi',1)">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('multi',0.5)">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('multi',-0.5)">取消 -0.5</button>
+
+<p>Rope Control 現在: <span id="reRope">0</span>/4</p>
+<button class="pres-btn" onclick="adjRE('rope',1)">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('rope',0.5)">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('rope',-0.5)">取消 -0.5</button>
+</div>
+
+<div id="reSenior" style="display:none">
+<p>Power Moves 現在: <span id="rePowerS">0</span>/6</p>
+<button class="pres-btn" onclick="adjRE('power',1,'senior')">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('power',0.5,'senior')">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('power',-0.5,'senior')">取消 -0.5</button>
+
+<p>Multiples 現在: <span id="reMultiS">0</span>/6</p>
+<button class="pres-btn" onclick="adjRE('multi',1,'senior')">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('multi',0.5,'senior')">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('multi',-0.5,'senior')">取消 -0.5</button>
+
+<p>Rope Control 現在: <span id="reRopeS">0</span>/6</p>
+<button class="pres-btn" onclick="adjRE('rope',1,'senior')">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('rope',0.5,'senior')">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('rope',-0.5,'senior')">取消 -0.5</button>
+</div>
+
+<button onclick="resetRE()">リセット</button>
+<div class="nav-clear"></div>
+<button class="nav-btn nav-left" onclick="next(3)">戻る</button>
+<button class="nav-btn nav-right" onclick="next(5)">次へ</button>
+<div class="nav-clear"></div>
+</div>
+
+<!-- Step 5: Final Score -->
+<div id="s5" class="section">
 <h3>🏁 Final Score</h3>
-<div class="result-score" id="result"></div>
+<div class="result-score" id="result">0.00</div>
 <button onclick="location.reload()">新しく採点する</button>
 </div>
 
@@ -152,6 +212,7 @@ videoUpload.onchange=e=>v.src=URL.createObjectURL(e.target.files[0]);
 
 // navigation
 function next(n){
+  if(n===0){return;} 
   document.querySelectorAll('.section').forEach(s=>s.classList.remove("active"));
   document.getElementById("s"+n).classList.add("active");
 }
@@ -159,24 +220,92 @@ function next(n){
 // Difficulty
 let diff=0;
 const diffTable={"0.5":0.12,"1":0.15,"2":0.23,"3":0.34,"4":0.51,"5":0.76,"6":1.14,"7":1.71,"8":2.56};
-function addDiff(l){ diff+=diffTable[l]; diffTotal.textContent=diff.toFixed(2); }
+function addDiff(l){ diff+=diffTable[l]; diffTotal.textContent=diff.toFixed(2); updateFinal();}
+function resetDiff(){ diff=0; diffTotal.textContent="0.00"; updateFinal(); }
 
 // Presentation
-let score={music:12,form:12,creative:12,ent:12,var:12};
-function adj(k,v){ score[k]=Math.max(0,Math.min(24,score[k]+v)); }
-let missCount=0,breakCount=0;
-setInterval(()=>{ missDisp.textContent=missCount; breakDisp.textContent=breakCount; },200);
+let pres={music:0,form:0,creative:0,ent:0,var:0};
+const presWeight={music:0.2,form:0.25,creative:0.15,ent:0.25,var:0.15};
+function updatePresTotal(){
+  let total=0;
+  for(let k in pres){
+    total += pres[k]*presWeight[k]/24;
+  }
+  total = Math.min(total*1.2,1.2);
+  presTotal.textContent = total.toFixed(2);
+  updateFinal();
+}
+function adjPres(k,v){
+  pres[k]=Math.max(0,Math.min(24,pres[k]+v));
+  document.getElementById("disp_"+k).textContent = pres[k];
+  updatePresTotal();
+}
+function resetPres(){
+  for(let k in pres) pres[k]=0;
+  for(let k in pres) document.getElementById("disp_"+k).textContent=0;
+  updatePresTotal();
+}
 
-// Final calc
-function calcFinal(){
-  let D=diff/3;
-  let P=(score.music*0.20+score.form*0.25+score.creative*0.15+score.ent*0.25+score.var*0.15)/24;
-  let re=document.querySelectorAll(".re:checked").length;
-  let Q=1-((3-re)*0.025);
-  let M=missCount===0?0:missCount===1?0.05:missCount===2?0.125:missCount===3?0.225:0.225+(missCount-3)*0.10;
-  let B=breakCount*0.05;
-  result.textContent=(D*(1+P)*Q*(1-(M+B))).toFixed(2);
-  next(4);
+// Miss / Break
+let missCount=0, breakCount=0;
+function logMiss(){ missCount++; missDisp.textContent=missCount; updateFinal(); }
+function undoMiss(){ missCount=Math.max(0,missCount-1); missDisp.textContent=missCount; updateFinal(); }
+function logBreak(){ breakCount++; breakDisp.textContent=breakCount; updateFinal(); }
+function undoBreak(){ breakCount=Math.max(0,breakCount-1); breakDisp.textContent=breakCount; updateFinal(); }
+
+// Required Elements
+let reScore={power:0,multi:0,rope:0};
+let isJunior=true;
+function switchTab(t){
+  if(t==='junior'){ 
+    isJunior=true;
+    reJunior.style.display='block';
+    reSenior.style.display='none';
+    juniorTab.classList.add('active');
+    seniorTab.classList.remove('active');
+  } else {
+    isJunior=false;
+    reJunior.style.display='none';
+    reSenior.style.display='block';
+    juniorTab.classList.remove('active');
+    seniorTab.classList.add('active');
+  }
+  resetRE();
+}
+function adjRE(k,v,group){
+  let target=isJunior?'Junior':'Senior';
+  if(group==='senior'){ isJunior=false;} 
+  let maxCount = isJunior?4:6;
+  reScore[k]=Math.max(0, Math.min(maxCount, reScore[k]+v));
+  if(k==='power') document.getElementById(isJunior?'rePower':'rePowerS').textContent=reScore[k];
+  if(k==='multi') document.getElementById(isJunior?'reMulti':'reMultiS').textContent=reScore[k];
+  if(k==='rope') document.getElementById(isJunior?'reRope':'reRopeS').textContent=reScore[k];
+  updateFinal();
+}
+function resetRE(){
+  reScore={power:0,multi:0,rope:0};
+  document.getElementById('rePower').textContent=0;
+  document.getElementById('reMulti').textContent=0;
+  document.getElementById('reRope').textContent=0;
+  document.getElementById('rePowerS').textContent=0;
+  document.getElementById('reMultiS').textContent=0;
+  document.getElementById('reRopeS').textContent=0;
+  updateFinal();
+}
+
+// Final Score 自動計算
+function updateFinal(){
+  let D = diff/3;
+  let P=0;
+  for(let k in pres) P+= pres[k]*presWeight[k]/24;
+  P=Math.min(P*1.2,1.2);
+  let maxRE = isJunior?4:6;
+  let RE = (reScore.power + reScore.multi + reScore.rope)/(3*maxRE);
+  let Q = RE;
+  let M = missCount===0?0:missCount===1?0.05:missCount===2?0.125:missCount===3?0.225:0.225+(missCount-3)*0.10;
+  let B = breakCount*0.05;
+  let final = D*(1+P)*Q*(1-(M+B));
+  result.textContent = Math.max(0,final).toFixed(2);
 }
 </script>
 </body>
