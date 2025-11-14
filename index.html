@@ -13,6 +13,16 @@ h3 { margin-top:16px; font-size:1.2em; color:#fff; text-shadow:0 0 2px #00d4ff; 
 .section { display:none; }
 .section.active { display:block; }
 
+/* Language Switcher */
+.lang-switcher { position:fixed; top:10px; right:10px; z-index:1000; }
+.lang-dropdown { position:relative; display:inline-block; }
+.lang-current { background:#00d4ff; border:1px solid #00d4ff; border-radius:6px; padding:10px 16px; color:#11112a; cursor:pointer; font-size:16px; font-weight:bold; }
+.lang-menu { display:none; position:absolute; right:0; top:45px; background:#11112a; border:1px solid #00d4ff; border-radius:6px; min-width:140px; box-shadow:0 4px 8px rgba(0,212,255,0.3); }
+.lang-menu.show { display:block; }
+.lang-option { padding:10px 16px; color:#00d4ff; cursor:pointer; font-size:14px; border-bottom:1px solid rgba(0,212,255,0.2); }
+.lang-option:last-child { border-bottom:none; }
+.lang-option:hover { background:#00d4ff; color:#11112a; }
+
 /* 共通ボタン */
 button { background: linear-gradient(to bottom,#222 0%,#444 100%); border:none; border-radius:8px; color:white; margin:5px; transition: all 0.2s; cursor:pointer; }
 button:hover { background: linear-gradient(to bottom,#333 0%,#555 100%); }
@@ -54,15 +64,28 @@ video { width:100%; border-radius:10px; margin-top:8px; }
 </style>
 </head>
 <body>
+<div class="lang-switcher">
+<div class="lang-dropdown">
+<button class="lang-current" onclick="toggleLangMenu()">🌐 <span id="currentLang">日本語</span> ▼</button>
+<div class="lang-menu" id="langMenu">
+<div class="lang-option" onclick="changeLang('ja')">🇯🇵 日本語</div>
+<div class="lang-option" onclick="changeLang('en')">🇺🇸 English</div>
+<div class="lang-option" onclick="changeLang('zh')">🇨🇳 中文</div>
+<div class="lang-option" onclick="changeLang('ko')">🇰🇷 한국어</div>
+<div class="lang-option" onclick="changeLang('ar')">🇸🇦 العربية</div>
+</div>
+</div>
+</div>
+
 <div class="container">
 
-<h2>🎥 演技動画</h2>
+<h2 id="title">🎥 演技動画</h2>
 <input type="file" id="videoUpload" accept="video/*"><br><br>
 <video id="video" controls></video>
 
 <!-- Step 1: Difficulty -->
 <div id="s1" class="section active">
-<h3>① Difficulty (技点)</h3>
+<h3 id="h1">① Difficulty (技点)</h3>
 <div class="level-grid">
 <button onclick="addDiff('1')">Lv1</button>
 <button onclick="addDiff('0.5')">Lv0.5</button>
@@ -74,133 +97,133 @@ video { width:100%; border-radius:10px; margin-top:8px; }
 <button onclick="addDiff('8')">Lv8</button>
 <button onclick="addDiff('6')">Lv6</button>
 </div>
-<div class="value-display">合計: <span id="diffTotal">0.00</span></div>
-<button onclick="resetDiff()">リセット</button>
+<div class="value-display"><span id="total1">合計</span>: <span id="diffTotal">0.00</span></div>
+<button onclick="resetDiff()" id="resetBtn1">リセット</button>
 <div class="nav-clear"></div>
-<button class="nav-btn nav-left" onclick="next(0)">戻る</button>
-<button class="nav-btn nav-right" onclick="next(2)">次へ</button>
+<button class="nav-btn nav-left" onclick="next(0)" id="backBtn1">戻る</button>
+<button class="nav-btn nav-right" onclick="next(2)" id="nextBtn1">次へ</button>
 <div class="nav-clear"></div>
 </div>
 
 <!-- Step 2: Presentation -->
 <div id="s2" class="section">
-<h3>② Presentation (表現)</h3>
-<div class="pres-row">音楽性 
+<h3 id="h2">② Presentation (表現)</h3>
+<div class="pres-row"><span id="music">音楽性</span>
   <span id="disp_music" class="pres-score">0</span>
   <span>
     <button class="pres-btn" onclick="adjPres('music',1)">➕</button>
     <button class="pres-btn" onclick="adjPres('music',-1)">➖</button>
   </span>
 </div>
-<div class="pres-row">フォーム 
+<div class="pres-row"><span id="form">フォーム</span>
   <span id="disp_form" class="pres-score">0</span>
   <span>
     <button class="pres-btn" onclick="adjPres('form',1)">➕</button>
     <button class="pres-btn" onclick="adjPres('form',-1)">➖</button>
   </span>
 </div>
-<div class="pres-row">創造性 
+<div class="pres-row"><span id="creative">創造性</span>
   <span id="disp_creative" class="pres-score">0</span>
   <span>
     <button class="pres-btn" onclick="adjPres('creative',1)">➕</button>
     <button class="pres-btn" onclick="adjPres('creative',-1)">➖</button>
   </span>
 </div>
-<div class="pres-row">エンタメ 
+<div class="pres-row"><span id="ent">エンタメ</span>
   <span id="disp_ent" class="pres-score">0</span>
   <span>
     <button class="pres-btn" onclick="adjPres('ent',1)">➕</button>
     <button class="pres-btn" onclick="adjPres('ent',-1)">➖</button>
   </span>
 </div>
-<div class="pres-row">多様性 
+<div class="pres-row"><span id="var">多様性</span>
   <span id="disp_var" class="pres-score">0</span>
   <span>
     <button class="pres-btn" onclick="adjPres('var',1)">➕</button>
     <button class="pres-btn" onclick="adjPres('var',-1)">➖</button>
   </span>
 </div>
-<div style="margin-top:10px;">現在のプレゼン得点: <span id="presTotal">0.00</span> / 1.20</div>
-<button onclick="resetPres()">リセット</button>
+<div style="margin-top:10px;"><span id="currentPres">現在のプレゼン得点</span>: <span id="presTotal">0.00</span> / 1.20</div>
+<button onclick="resetPres()" id="resetBtn2">リセット</button>
 <div class="nav-clear"></div>
-<button class="nav-btn nav-left" onclick="next(1)">戻る</button>
-<button class="nav-btn nav-right" onclick="next(3)">次へ</button>
+<button class="nav-btn nav-left" onclick="next(1)" id="backBtn2">戻る</button>
+<button class="nav-btn nav-right" onclick="next(3)" id="nextBtn2">次へ</button>
 <div class="nav-clear"></div>
 </div>
 
 <!-- Step 3: Miss / Break -->
 <div id="s3" class="section">
-<h3>③ ミス / ブレイク</h3>
+<h3 id="h3">③ ミス / ブレイク</h3>
 <div class="count-box">
-<p>MISS: <span id="missDisp">0</span></p>
+<p><span id="missLabel">MISS</span>: <span id="missDisp">0</span></p>
 <button class="big-btn" onclick="logMiss()">+1</button>
 <button class="mini-btn" onclick="undoMiss()">-1</button>
 </div>
 <div class="count-box">
-<p>BREAK: <span id="breakDisp">0</span></p>
+<p><span id="breakLabel">BREAK</span>: <span id="breakDisp">0</span></p>
 <button class="big-btn" onclick="logBreak()">+1</button>
 <button class="mini-btn" onclick="undoBreak()">-1</button>
 </div>
 <div class="nav-clear"></div>
-<button class="nav-btn nav-left" onclick="next(2)">戻る</button>
-<button class="nav-btn nav-right" onclick="next(4)">次へ</button>
+<button class="nav-btn nav-left" onclick="next(2)" id="backBtn3">戻る</button>
+<button class="nav-btn nav-right" onclick="next(4)" id="nextBtn3">次へ</button>
 <div class="nav-clear"></div>
 </div>
 
 <!-- Step 4: Required Elements -->
 <div id="s4" class="section">
-<h3>④ Required Elements</h3>
+<h3 id="h4">④ Required Elements</h3>
 <p>
-<button class="tab-btn active" id="juniorTab" onclick="switchTab('junior')">ジュニア 4カウント</button>
-<button class="tab-btn" id="seniorTab" onclick="switchTab('senior')">シニア 6カウント</button>
+<button class="tab-btn active" id="juniorTab" onclick="switchTab('junior')" data-junior="ジュニア 4カウント">ジュニア 4カウント</button>
+<button class="tab-btn" id="seniorTab" onclick="switchTab('senior')" data-senior="シニア 6カウント">シニア 6カウント</button>
 </p>
 
 <div id="reJunior">
-<p>Power Moves 現在: <span id="rePower">0</span>/4</p>
-<button class="pres-btn" onclick="adjRE('power',1)">Lv3 +1</button>
-<button class="pres-btn" onclick="adjRE('power',0.5)">Lv2以下 +0.5</button>
-<button class="pres-btn" onclick="adjRE('power',-0.5)">取消 -0.5</button>
+<p><span id="powerLabel">Power Moves</span> <span id="currentLabel1">現在</span>: <span id="rePower">0</span>/4</p>
+<button class="pres-btn" onclick="adjRE('power',1)" data-lv3="Lv3 +1">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('power',0.5)" data-lv2="Lv2以下 +0.5">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('power',-0.5)" data-cancel="取消 -0.5">取消 -0.5</button>
 
-<p>Multiples 現在: <span id="reMulti">0</span>/4</p>
-<button class="pres-btn" onclick="adjRE('multi',1)">Lv3 +1</button>
-<button class="pres-btn" onclick="adjRE('multi',0.5)">Lv2以下 +0.5</button>
-<button class="pres-btn" onclick="adjRE('multi',-0.5)">取消 -0.5</button>
+<p><span id="multiLabel">Multiples</span> <span id="currentLabel2">現在</span>: <span id="reMulti">0</span>/4</p>
+<button class="pres-btn" onclick="adjRE('multi',1)" data-lv3="Lv3 +1">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('multi',0.5)" data-lv2="Lv2以下 +0.5">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('multi',-0.5)" data-cancel="取消 -0.5">取消 -0.5</button>
 
-<p>Rope Control 現在: <span id="reRope">0</span>/4</p>
-<button class="pres-btn" onclick="adjRE('rope',1)">Lv3 +1</button>
-<button class="pres-btn" onclick="adjRE('rope',0.5)">Lv2以下 +0.5</button>
-<button class="pres-btn" onclick="adjRE('rope',-0.5)">取消 -0.5</button>
+<p><span id="ropeLabel">Rope Control</span> <span id="currentLabel3">現在</span>: <span id="reRope">0</span>/4</p>
+<button class="pres-btn" onclick="adjRE('rope',1)" data-lv3="Lv3 +1">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('rope',0.5)" data-lv2="Lv2以下 +0.5">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('rope',-0.5)" data-cancel="取消 -0.5">取消 -0.5</button>
 </div>
 
 <div id="reSenior" style="display:none">
-<p>Power Moves 現在: <span id="rePowerS">0</span>/6</p>
-<button class="pres-btn" onclick="adjRE('power',1,'senior')">Lv3 +1</button>
-<button class="pres-btn" onclick="adjRE('power',0.5,'senior')">Lv2以下 +0.5</button>
-<button class="pres-btn" onclick="adjRE('power',-0.5,'senior')">取消 -0.5</button>
+<p><span id="powerLabelS">Power Moves</span> <span id="currentLabel1S">現在</span>: <span id="rePowerS">0</span>/6</p>
+<button class="pres-btn" onclick="adjRE('power',1,'senior')" data-lv3="Lv3 +1">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('power',0.5,'senior')" data-lv2="Lv2以下 +0.5">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('power',-0.5,'senior')" data-cancel="取消 -0.5">取消 -0.5</button>
 
-<p>Multiples 現在: <span id="reMultiS">0</span>/6</p>
-<button class="pres-btn" onclick="adjRE('multi',1,'senior')">Lv3 +1</button>
-<button class="pres-btn" onclick="adjRE('multi',0.5,'senior')">Lv2以下 +0.5</button>
-<button class="pres-btn" onclick="adjRE('multi',-0.5,'senior')">取消 -0.5</button>
+<p><span id="multiLabelS">Multiples</span> <span id="currentLabel2S">現在</span>: <span id="reMultiS">0</span>/6</p>
+<button class="pres-btn" onclick="adjRE('multi',1,'senior')" data-lv3="Lv3 +1">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('multi',0.5,'senior')" data-lv2="Lv2以下 +0.5">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('multi',-0.5,'senior')" data-cancel="取消 -0.5">取消 -0.5</button>
 
-<p>Rope Control 現在: <span id="reRopeS">0</span>/6</p>
-<button class="pres-btn" onclick="adjRE('rope',1,'senior')">Lv3 +1</button>
-<button class="pres-btn" onclick="adjRE('rope',0.5,'senior')">Lv2以下 +0.5</button>
-<button class="pres-btn" onclick="adjRE('rope',-0.5,'senior')">取消 -0.5</button>
+<p><span id="ropeLabelS">Rope Control</span> <span id="currentLabel2S">現在</span>: <span id="reRopeS">0</span>/6</p>
+<button class="pres-btn" onclick="adjRE('rope',1,'senior')" data-lv3="Lv3 +1">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('rope',0.5,'senior')" data-lv2="Lv2以下 +0.5">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('rope',-0.5,'senior')" data-cancel="取消 -0.5">取消 -0.5</button>
 </div>
 
-<button onclick="resetRE()">リセット</button>
+<button onclick="resetRE()" id="resetBtn4">リセット</button>
 <div class="nav-clear"></div>
-<button class="nav-btn nav-left" onclick="next(3)">戻る</button>
-<button class="nav-btn nav-right" onclick="next(5)">次へ</button>
+<button class="nav-btn nav-left" onclick="next(3)" id="backBtn4">戻る</button>
+<button class="nav-btn nav-right" onclick="next(5)" id="nextBtn4">次へ</button>
 <div class="nav-clear"></div>
 </div>
 
 <!-- Step 5: Final Score -->
 <div id="s5" class="section">
-<h3>🏁 Final Score</h3>
+<h3 id="h5">🏁 Final Score</h3>
 <div class="result-score" id="result">0.00</div>
-<button onclick="location.reload()">新しく採点する</button>
+<button onclick="location.reload()" id="newScoreBtn">新しく採点する</button>
 </div>
 
 </div>
@@ -209,6 +232,227 @@ video { width:100%; border-radius:10px; margin-top:8px; }
 // video
 const v=document.getElementById("video");
 videoUpload.onchange=e=>v.src=URL.createObjectURL(e.target.files[0]);
+
+// Language toggle
+function toggleLangMenu(){
+  document.getElementById('langMenu').classList.toggle('show');
+}
+document.addEventListener('click', function(e){
+  if(!e.target.closest('.lang-dropdown')){
+    document.getElementById('langMenu').classList.remove('show');
+  }
+});
+
+// Language data
+const translations = {
+  ja: {
+    name: '日本語',
+    title: '🎥 演技動画',
+    h1: '① Difficulty (技点)',
+    h2: '② Presentation (表現)',
+    h3: '③ ミス / ブレイク',
+    h4: '④ Required Elements',
+    h5: '🏁 Final Score',
+    total1: '合計',
+    music: '音楽性',
+    form: 'フォーム',
+    creative: '創造性',
+    ent: 'エンタメ',
+    var: '多様性',
+    currentPres: '現在のプレゼン得点',
+    missLabel: 'MISS',
+    breakLabel: 'BREAK',
+    powerLabel: 'Power Moves',
+    multiLabel: 'Multiples',
+    ropeLabel: 'Rope Control',
+    currentLabel: '現在',
+    juniorTab: 'ジュニア 4カウント',
+    seniorTab: 'シニア 6カウント',
+    lv3: 'Lv3 +1',
+    lv2: 'Lv2以下 +0.5',
+    cancel: '取消 -0.5',
+    resetBtn: 'リセット',
+    backBtn: '戻る',
+    nextBtn: '次へ',
+    newScoreBtn: '新しく採点する'
+  },
+  en: {
+    name: 'English',
+    title: '🎥 Performance Video',
+    h1: '① Difficulty',
+    h2: '② Presentation',
+    h3: '③ Miss / Break',
+    h4: '④ Required Elements',
+    h5: '🏁 Final Score',
+    total1: 'Total',
+    music: 'Musicality',
+    form: 'Form',
+    creative: 'Creativity',
+    ent: 'Entertainment',
+    var: 'Variety',
+    currentPres: 'Current Presentation Score',
+    missLabel: 'MISS',
+    breakLabel: 'BREAK',
+    powerLabel: 'Power Moves',
+    multiLabel: 'Multiples',
+    ropeLabel: 'Rope Control',
+    currentLabel: 'Current',
+    juniorTab: 'Junior 4 Counts',
+    seniorTab: 'Senior 6 Counts',
+    lv3: 'Lv3 +1',
+    lv2: 'Lv2 or less +0.5',
+    cancel: 'Cancel -0.5',
+    resetBtn: 'Reset',
+    backBtn: 'Back',
+    nextBtn: 'Next',
+    newScoreBtn: 'New Scoring'
+  },
+  zh: {
+    name: '中文',
+    title: '🎥 表演视频',
+    h1: '① 难度',
+    h2: '② 表现',
+    h3: '③ 失误 / 中断',
+    h4: '④ 必需元素',
+    h5: '🏁 最终得分',
+    total1: '总计',
+    music: '音乐性',
+    form: '形态',
+    creative: '创造性',
+    ent: '娱乐性',
+    var: '多样性',
+    currentPres: '当前表现得分',
+    missLabel: '失误',
+    breakLabel: '中断',
+    powerLabel: 'Power Moves',
+    multiLabel: 'Multiples',
+    ropeLabel: 'Rope Control',
+    currentLabel: '当前',
+    juniorTab: '少年组 4次',
+    seniorTab: '高级组 6次',
+    lv3: 'Lv3 +1',
+    lv2: 'Lv2及以下 +0.5',
+    cancel: '取消 -0.5',
+    resetBtn: '重置',
+    backBtn: '返回',
+    nextBtn: '下一步',
+    newScoreBtn: '新评分'
+  },
+  ko: {
+    name: '한국어',
+    title: '🎥 공연 영상',
+    h1: '① 난이도',
+    h2: '② 표현',
+    h3: '③ 미스 / 브레이크',
+    h4: '④ 필수 요소',
+    h5: '🏁 최종 점수',
+    total1: '합계',
+    music: '음악성',
+    form: '폼',
+    creative: '창의성',
+    ent: '엔터테인먼트',
+    var: '다양성',
+    currentPres: '현재 표현 점수',
+    missLabel: '미스',
+    breakLabel: '브레이크',
+    powerLabel: 'Power Moves',
+    multiLabel: 'Multiples',
+    ropeLabel: 'Rope Control',
+    currentLabel: '현재',
+    juniorTab: '주니어 4카운트',
+    seniorTab: '시니어 6카운트',
+    lv3: 'Lv3 +1',
+    lv2: 'Lv2 이하 +0.5',
+    cancel: '취소 -0.5',
+    resetBtn: '리셋',
+    backBtn: '뒤로',
+    nextBtn: '다음',
+    newScoreBtn: '새로 채점하기'
+  },
+  ar: {
+    name: 'العربية',
+    title: '🎥 فيديو الأداء',
+    h1: '① الصعوبة',
+    h2: '② العرض',
+    h3: '③ خطأ / توقف',
+    h4: '④ العناصر المطلوبة',
+    h5: '🏁 النتيجة النهائية',
+    total1: 'المجموع',
+    music: 'الموسيقى',
+    form: 'الشكل',
+    creative: 'الإبداع',
+    ent: 'الترفيه',
+    var: 'التنوع',
+    currentPres: 'نقاط العرض الحالية',
+    missLabel: 'خطأ',
+    breakLabel: 'توقف',
+    powerLabel: 'Power Moves',
+    multiLabel: 'Multiples',
+    ropeLabel: 'Rope Control',
+    currentLabel: 'الحالي',
+    juniorTab: 'المبتدئين 4 عد',
+    seniorTab: 'المتقدمين 6 عد',
+    lv3: 'Lv3 +1',
+    lv2: 'Lv2 أو أقل +0.5',
+    cancel: 'إلغاء -0.5',
+    resetBtn: 'إعادة تعيين',
+    backBtn: 'رجوع',
+    nextBtn: 'التالي',
+    newScoreBtn: 'تسجيل جديد'
+  }
+};
+
+function changeLang(lang) {
+  const t = translations[lang];
+  document.getElementById('currentLang').textContent = t.name;
+  document.getElementById('title').textContent = t.title;
+  document.getElementById('h1').textContent = t.h1;
+  document.getElementById('h2').textContent = t.h2;
+  document.getElementById('h3').textContent = t.h3;
+  document.getElementById('h4').textContent = t.h4;
+  document.getElementById('h5').textContent = t.h5;
+  document.getElementById('total1').textContent = t.total1;
+  document.getElementById('music').textContent = t.music;
+  document.getElementById('form').textContent = t.form;
+  document.getElementById('creative').textContent = t.creative;
+  document.getElementById('ent').textContent = t.ent;
+  document.getElementById('var').textContent = t.var;
+  document.getElementById('currentPres').textContent = t.currentPres;
+  document.getElementById('missLabel').textContent = t.missLabel;
+  document.getElementById('breakLabel').textContent = t.breakLabel;
+  document.getElementById('powerLabel').textContent = t.powerLabel;
+  document.getElementById('multiLabel').textContent = t.multiLabel;
+  document.getElementById('ropeLabel').textContent = t.ropeLabel;
+  document.getElementById('currentLabel1').textContent = t.currentLabel;
+  document.getElementById('currentLabel2').textContent = t.currentLabel;
+  document.getElementById('currentLabel3').textContent = t.currentLabel;
+  document.getElementById('powerLabelS').textContent = t.powerLabel;
+  document.getElementById('multiLabelS').textContent = t.multiLabel;
+  document.getElementById('ropeLabelS').textContent = t.ropeLabel;
+  document.getElementById('currentLabel1S').textContent = t.currentLabel;
+  document.getElementById('currentLabel2S').textContent = t.currentLabel;
+  document.getElementById('currentLabel2S').textContent = t.currentLabel;
+  document.getElementById('juniorTab').textContent = t.juniorTab;
+  document.getElementById('seniorTab').textContent = t.seniorTab;
+  document.getElementById('resetBtn1').textContent = t.resetBtn;
+  document.getElementById('resetBtn2').textContent = t.resetBtn;
+  document.getElementById('resetBtn4').textContent = t.resetBtn;
+  document.getElementById('backBtn1').textContent = t.backBtn;
+  document.getElementById('backBtn2').textContent = t.backBtn;
+  document.getElementById('backBtn3').textContent = t.backBtn;
+  document.getElementById('backBtn4').textContent = t.backBtn;
+  document.getElementById('nextBtn1').textContent = t.nextBtn;
+  document.getElementById('nextBtn2').textContent = t.nextBtn;
+  document.getElementById('nextBtn3').textContent = t.nextBtn;
+  document.getElementById('nextBtn4').textContent = t.nextBtn;
+  document.getElementById('newScoreBtn').textContent = t.newScoreBtn;
+  
+  document.querySelectorAll('[data-lv3]').forEach(btn => btn.textContent = t.lv3);
+  document.querySelectorAll('[data-lv2]').forEach(btn => btn.textContent = t.lv2);
+  document.querySelectorAll('[data-cancel]').forEach(btn => btn.textContent = t.cancel);
+  
+  document.getElementById('langMenu').classList.remove('show');
+}
 
 // navigation
 function next(n){
