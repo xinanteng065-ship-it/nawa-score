@@ -2,65 +2,333 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>縄すこ JJRU Ver.4.2.0 自動計算</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>縄すこ JJRU Ver.4.2.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
-body { background:linear-gradient(135deg,#0a0a1a,#11112a); color:#eee; font-family:sans-serif; margin:0; text-align:center; }
-h2 { margin-top:18px; font-size:1.5em; color:#00d4ff; text-shadow:0 0 5px #00d4ff;}
-h3 { margin-top:16px; font-size:1.2em; color:#fff; text-shadow:0 0 2px #00d4ff; }
+* { box-sizing: border-box; }
+body { 
+  background: linear-gradient(135deg,#0a0a1a,#11112a); 
+  color: #eee; 
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+  margin: 0; 
+  padding: 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+h2 { 
+  margin: 60px 0 12px; 
+  font-size: 1.4em; 
+  color: #00d4ff; 
+  text-shadow: 0 0 5px #00d4ff;
+  text-align: center;
+}
+h3 { 
+  margin: 16px 0 12px; 
+  font-size: 1.2em; 
+  color: #fff; 
+  text-shadow: 0 0 2px #00d4ff;
+  text-align: center;
+}
 
-.container { max-width:600px; margin:auto; padding:10px; }
-.section { display:none; }
-.section.active { display:block; }
+.container { 
+  max-width: 100%; 
+  margin: 0 auto; 
+  padding: 12px; 
+}
+.section { display: none; }
+.section.active { display: block; }
 
 /* Language Switcher */
-.lang-switcher { position:fixed; top:10px; right:10px; z-index:1000; }
-.lang-dropdown { position:relative; display:inline-block; }
-.lang-current { background:#00d4ff; border:1px solid #00d4ff; border-radius:6px; padding:10px 16px; color:#11112a; cursor:pointer; font-size:16px; font-weight:bold; }
-.lang-menu { display:none; position:absolute; right:0; top:45px; background:#11112a; border:1px solid #00d4ff; border-radius:6px; min-width:140px; box-shadow:0 4px 8px rgba(0,212,255,0.3); }
-.lang-menu.show { display:block; }
-.lang-option { padding:10px 16px; color:#00d4ff; cursor:pointer; font-size:14px; border-bottom:1px solid rgba(0,212,255,0.2); }
-.lang-option:last-child { border-bottom:none; }
-.lang-option:hover { background:#00d4ff; color:#11112a; }
+.lang-switcher { 
+  position: fixed; 
+  top: 8px; 
+  right: 8px; 
+  z-index: 1000; 
+}
+.lang-dropdown { 
+  position: relative; 
+  display: inline-block; 
+}
+.lang-current { 
+  background: #00d4ff; 
+  border: none; 
+  border-radius: 6px; 
+  padding: 6px 10px; 
+  color: #11112a; 
+  cursor: pointer; 
+  font-size: 13px; 
+  font-weight: bold;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.lang-menu { 
+  display: none; 
+  position: absolute; 
+  right: 0; 
+  top: 40px; 
+  background: #11112a; 
+  border: 1px solid #00d4ff; 
+  border-radius: 8px; 
+  min-width: 130px; 
+  box-shadow: 0 4px 12px rgba(0,212,255,0.4); 
+}
+.lang-menu.show { display: block; }
+.lang-option { 
+  padding: 10px 14px; 
+  color: #00d4ff; 
+  cursor: pointer; 
+  font-size: 14px; 
+  border-bottom: 1px solid rgba(0,212,255,0.2);
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+.lang-option:last-child { border-bottom: none; }
+.lang-option:hover, .lang-option:active { 
+  background: #00d4ff; 
+  color: #11112a; 
+}
 
 /* 共通ボタン */
-button { background: linear-gradient(to bottom,#222 0%,#444 100%); border:none; border-radius:8px; color:white; margin:5px; transition: all 0.2s; cursor:pointer; }
-button:hover { background: linear-gradient(to bottom,#333 0%,#555 100%); }
-button:active { transform:scale(0.95); background:#666; }
+button { 
+  background: linear-gradient(to bottom,#222 0%,#444 100%); 
+  border: none; 
+  border-radius: 10px; 
+  color: white; 
+  margin: 6px 4px; 
+  transition: all 0.2s; 
+  cursor: pointer;
+  font-size: 16px;
+  min-height: 44px;
+  padding: 12px 16px;
+  touch-action: manipulation;
+}
+button:active { 
+  transform: scale(0.96); 
+  background: #555; 
+}
 
-/* Difficulty */
-.level-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:12px 0; }
-.level-grid button { width:118px; height:118px; font-size:12px; padding:0; background:#11112a; border:1px solid #00d4ff; color:#00d4ff; }
+/* Difficulty Grid */
+.level-grid { 
+  display: grid; 
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 8px; 
+  margin: 16px 0; 
+  padding: 0 4px;
+}
+.level-grid button { 
+  width: 100%;
+  height: 80px;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  background: #11112a; 
+  border: 2px solid #00d4ff; 
+  color: #00d4ff;
+}
+.level-grid button:active {
+  background: #00d4ff;
+  color: #11112a;
+}
 
-/* Difficulty 合計表示 */
-.value-display { font-size:20px; margin-top:10px; color:#00d4ff; }
+/* Value Display */
+.value-display { 
+  font-size: 22px; 
+  margin: 16px 0; 
+  color: #00d4ff;
+  font-weight: bold;
+  text-align: center;
+}
 
 /* Presentation */
-.pres-row { display:flex; justify-content:space-between; align-items:center; margin:8px 0; font-size:18px; flex-wrap:wrap; }
-.pres-btn { background:#11112a; border:1px solid #00d4ff; border-radius:6px; padding:6px 12px; font-size:18px; margin-left:4px; margin-top:4px; color:#00d4ff;}
-.pres-btn:hover { background:#00d4ff; color:#11112a;}
-.pres-score { font-weight:bold; margin-left:8px; color:#00ffff; text-shadow:0 0 3px #00ffff; }
+.pres-row { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin: 12px 0; 
+  font-size: 17px;
+  padding: 8px 4px;
+  background: rgba(0,212,255,0.05);
+  border-radius: 8px;
+}
+.pres-label {
+  flex: 0 0 auto;
+  min-width: 90px;
+}
+.pres-score { 
+  font-weight: bold; 
+  color: #00ffff; 
+  text-shadow: 0 0 3px #00ffff;
+  font-size: 20px;
+  min-width: 40px;
+  text-align: center;
+}
+.pres-btns {
+  display: flex;
+  gap: 4px;
+}
+.pres-btn { 
+  background: #11112a; 
+  border: 2px solid #00d4ff; 
+  border-radius: 8px; 
+  padding: 8px 14px; 
+  font-size: 20px;
+  margin: 0;
+  color: #00d4ff;
+  min-width: 44px;
+  min-height: 44px;
+}
+.pres-btn:active { 
+  background: #00d4ff; 
+  color: #11112a;
+}
+
+.pres-total {
+  margin: 16px 0;
+  font-size: 19px;
+  text-align: center;
+  font-weight: bold;
+}
 
 /* MISS / BREAK */
-.count-box { margin:15px 0; }
-.big-btn { background: linear-gradient(to bottom,#00d4ff 0%,#00a0cc 100%); color:#11112a; padding:12px 18px; border-radius:10px; font-size:20px; }
-.mini-btn { background:#11112a; border:1px solid #00d4ff; padding:6px 10px; border-radius:8px; font-size:16px; color:#00d4ff; }
-.mini-btn:hover { background:#00d4ff; color:#11112a; }
+.count-box { 
+  margin: 20px 0; 
+  padding: 16px;
+  background: rgba(0,212,255,0.05);
+  border-radius: 10px;
+}
+.count-box p {
+  font-size: 20px;
+  margin: 0 0 12px 0;
+  font-weight: bold;
+}
+.big-btn { 
+  background: linear-gradient(to bottom,#00d4ff 0%,#00a0cc 100%); 
+  color: #11112a; 
+  padding: 16px 24px; 
+  border-radius: 12px; 
+  font-size: 22px;
+  font-weight: bold;
+  min-height: 56px;
+}
+.mini-btn { 
+  background: #11112a; 
+  border: 2px solid #00d4ff; 
+  padding: 12px 20px; 
+  border-radius: 10px; 
+  font-size: 18px; 
+  color: #00d4ff;
+}
+.mini-btn:active { 
+  background: #00d4ff; 
+  color: #11112a; 
+}
 
 /* Required Elements */
-.checkbox-list { text-align:left; margin-left:10%; color:#fff; }
-.result-score { font-size:48px; margin-top:20px; color:#00d4ff; text-shadow:0 0 8px #00d4ff; word-break:break-word; }
-video { width:100%; border-radius:10px; margin-top:8px; }
+.re-section {
+  margin: 16px 0;
+  padding: 16px 12px;
+  background: rgba(0,212,255,0.05);
+  border-radius: 10px;
+}
+.re-section p {
+  font-size: 18px;
+  margin: 12px 0;
+  font-weight: bold;
+}
+.re-btns {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
-/* ナビボタン */
-.nav-btn { background:#11112a; color:#00d4ff; border:1px solid #00d4ff; border-radius:8px; padding:10px 18px; font-size:18px; margin:10px 5px; }
-.nav-left { float:left; }
-.nav-right { float:right; }
-.nav-clear { clear:both; }
+/* Result */
+.result-score { 
+  font-size: 56px; 
+  margin: 24px 0; 
+  color: #00d4ff; 
+  text-shadow: 0 0 10px #00d4ff;
+  font-weight: bold;
+  text-align: center;
+  word-break: break-word;
+}
 
-/* タブ切替 */
-.tab-btn { padding:6px 12px; border-radius:6px; border:1px solid #00d4ff; background:#11112a; color:#00d4ff; margin:4px; cursor:pointer; }
-.tab-btn.active { background:#00d4ff; color:#11112a; }
+/* Video */
+video { 
+  width: 100%; 
+  max-width: 100%;
+  border-radius: 10px; 
+  margin: 12px 0;
+}
+input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 2px solid #00d4ff;
+  background: #11112a;
+  color: #00d4ff;
+}
+
+/* Navigation */
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0 12px;
+  gap: 8px;
+}
+.nav-btn { 
+  background: #11112a; 
+  color: #00d4ff; 
+  border: 2px solid #00d4ff; 
+  border-radius: 10px; 
+  padding: 14px 20px; 
+  font-size: 17px;
+  flex: 1;
+  font-weight: bold;
+}
+.nav-btn:active {
+  background: #00d4ff;
+  color: #11112a;
+}
+
+/* Tabs */
+.tab-buttons {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.tab-btn { 
+  padding: 12px 18px; 
+  border-radius: 10px; 
+  border: 2px solid #00d4ff; 
+  background: #11112a; 
+  color: #00d4ff; 
+  margin: 0;
+  cursor: pointer;
+  font-size: 16px;
+}
+.tab-btn.active { 
+  background: #00d4ff; 
+  color: #11112a;
+  font-weight: bold;
+}
+
+/* Reset Button */
+.reset-btn {
+  display: block;
+  width: calc(100% - 8px);
+  margin: 16px auto;
+  background: #8B0000;
+  color: white;
+  font-weight: bold;
+}
 </style>
 </head>
 <body>
@@ -80,7 +348,7 @@ video { width:100%; border-radius:10px; margin-top:8px; }
 <div class="container">
 
 <h2 id="title">🎥 演技動画</h2>
-<input type="file" id="videoUpload" accept="video/*"><br><br>
+<input type="file" id="videoUpload" accept="video/*">
 <video id="video" controls></video>
 
 <!-- Step 1: Difficulty -->
@@ -98,57 +366,63 @@ video { width:100%; border-radius:10px; margin-top:8px; }
 <button onclick="addDiff('6')">Lv6</button>
 </div>
 <div class="value-display"><span id="total1">合計</span>: <span id="diffTotal">0.00</span></div>
-<button onclick="resetDiff()" id="resetBtn1">リセット</button>
-<div class="nav-clear"></div>
-<button class="nav-btn nav-left" onclick="next(0)" id="backBtn1">戻る</button>
-<button class="nav-btn nav-right" onclick="next(2)" id="nextBtn1">次へ</button>
-<div class="nav-clear"></div>
+<button class="mini-btn" onclick="undoDiff()" id="undoBtn1">入力を戻る</button>
+<button class="reset-btn" onclick="resetDiff()" id="resetBtn1">リセット</button>
+<div class="nav-buttons">
+<button class="nav-btn" onclick="next(0)" id="backBtn1">戻る</button>
+<button class="nav-btn" onclick="next(2)" id="nextBtn1">次へ</button>
+</div>
 </div>
 
 <!-- Step 2: Presentation -->
 <div id="s2" class="section">
 <h3 id="h2">② Presentation (表現)</h3>
-<div class="pres-row"><span id="music">音楽性</span>
+<div class="pres-row">
+  <span class="pres-label" id="music">音楽性</span>
   <span id="disp_music" class="pres-score">0</span>
-  <span>
+  <span class="pres-btns">
     <button class="pres-btn" onclick="adjPres('music',1)">➕</button>
     <button class="pres-btn" onclick="adjPres('music',-1)">➖</button>
   </span>
 </div>
-<div class="pres-row"><span id="form">フォーム</span>
+<div class="pres-row">
+  <span class="pres-label" id="form">フォーム</span>
   <span id="disp_form" class="pres-score">0</span>
-  <span>
+  <span class="pres-btns">
     <button class="pres-btn" onclick="adjPres('form',1)">➕</button>
     <button class="pres-btn" onclick="adjPres('form',-1)">➖</button>
   </span>
 </div>
-<div class="pres-row"><span id="creative">創造性</span>
+<div class="pres-row">
+  <span class="pres-label" id="creative">創造性</span>
   <span id="disp_creative" class="pres-score">0</span>
-  <span>
+  <span class="pres-btns">
     <button class="pres-btn" onclick="adjPres('creative',1)">➕</button>
     <button class="pres-btn" onclick="adjPres('creative',-1)">➖</button>
   </span>
 </div>
-<div class="pres-row"><span id="ent">エンタメ</span>
+<div class="pres-row">
+  <span class="pres-label" id="ent">エンタメ</span>
   <span id="disp_ent" class="pres-score">0</span>
-  <span>
+  <span class="pres-btns">
     <button class="pres-btn" onclick="adjPres('ent',1)">➕</button>
     <button class="pres-btn" onclick="adjPres('ent',-1)">➖</button>
   </span>
 </div>
-<div class="pres-row"><span id="var">多様性</span>
+<div class="pres-row">
+  <span class="pres-label" id="var">多様性</span>
   <span id="disp_var" class="pres-score">0</span>
-  <span>
+  <span class="pres-btns">
     <button class="pres-btn" onclick="adjPres('var',1)">➕</button>
     <button class="pres-btn" onclick="adjPres('var',-1)">➖</button>
   </span>
 </div>
-<div style="margin-top:10px;"><span id="currentPres">現在のプレゼン得点</span>: <span id="presTotal">0.00</span> / 1.20</div>
-<button onclick="resetPres()" id="resetBtn2">リセット</button>
-<div class="nav-clear"></div>
-<button class="nav-btn nav-left" onclick="next(1)" id="backBtn2">戻る</button>
-<button class="nav-btn nav-right" onclick="next(3)" id="nextBtn2">次へ</button>
-<div class="nav-clear"></div>
+<div class="pres-total"><span id="currentPres">現在のプレゼン得点</span>: <span id="presTotal">0.00</span> / 1.20</div>
+<button class="reset-btn" onclick="resetPres()" id="resetBtn2">リセット</button>
+<div class="nav-buttons">
+<button class="nav-btn" onclick="next(1)" id="backBtn2">戻る</button>
+<button class="nav-btn" onclick="next(3)" id="nextBtn2">次へ</button>
+</div>
 </div>
 
 <!-- Step 3: Miss / Break -->
@@ -164,76 +438,98 @@ video { width:100%; border-radius:10px; margin-top:8px; }
 <button class="big-btn" onclick="logBreak()">+1</button>
 <button class="mini-btn" onclick="undoBreak()">-1</button>
 </div>
-<div class="nav-clear"></div>
-<button class="nav-btn nav-left" onclick="next(2)" id="backBtn3">戻る</button>
-<button class="nav-btn nav-right" onclick="next(4)" id="nextBtn3">次へ</button>
-<div class="nav-clear"></div>
+<div class="nav-buttons">
+<button class="nav-btn" onclick="next(2)" id="backBtn3">戻る</button>
+<button class="nav-btn" onclick="next(4)" id="nextBtn3">次へ</button>
+</div>
 </div>
 
 <!-- Step 4: Required Elements -->
 <div id="s4" class="section">
 <h3 id="h4">④ Required Elements</h3>
-<p>
-<button class="tab-btn active" id="juniorTab" onclick="switchTab('junior')" data-junior="ジュニア 4カウント">ジュニア 4カウント</button>
-<button class="tab-btn" id="seniorTab" onclick="switchTab('senior')" data-senior="シニア 6カウント">シニア 6カウント</button>
-</p>
+<div class="tab-buttons">
+<button class="tab-btn active" id="juniorTab" onclick="switchTab('junior')">ジュニア 4カウント</button>
+<button class="tab-btn" id="seniorTab" onclick="switchTab('senior')">シニア 6カウント</button>
+</div>
 
 <div id="reJunior">
+<div class="re-section">
 <p><span id="powerLabel">Power Moves</span> <span id="currentLabel1">現在</span>: <span id="rePower">0</span>/4</p>
-<button class="pres-btn" onclick="adjRE('power',1)" data-lv3="Lv3 +1">Lv3 +1</button>
-<button class="pres-btn" onclick="adjRE('power',0.5)" data-lv2="Lv2以下 +0.5">Lv2以下 +0.5</button>
-<button class="pres-btn" onclick="adjRE('power',-0.5)" data-cancel="取消 -0.5">取消 -0.5</button>
+<div class="re-btns">
+<button class="pres-btn" onclick="adjRE('power',1)" data-lv3="">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('power',0.5)" data-lv2="">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('power',-0.5)" data-cancel="">取消 -0.5</button>
+</div>
+</div>
 
+<div class="re-section">
 <p><span id="multiLabel">Multiples</span> <span id="currentLabel2">現在</span>: <span id="reMulti">0</span>/4</p>
-<button class="pres-btn" onclick="adjRE('multi',1)" data-lv3="Lv3 +1">Lv3 +1</button>
-<button class="pres-btn" onclick="adjRE('multi',0.5)" data-lv2="Lv2以下 +0.5">Lv2以下 +0.5</button>
-<button class="pres-btn" onclick="adjRE('multi',-0.5)" data-cancel="取消 -0.5">取消 -0.5</button>
+<div class="re-btns">
+<button class="pres-btn" onclick="adjRE('multi',1)" data-lv3="">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('multi',0.5)" data-lv2="">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('multi',-0.5)" data-cancel="">取消 -0.5</button>
+</div>
+</div>
 
+<div class="re-section">
 <p><span id="ropeLabel">Rope Control</span> <span id="currentLabel3">現在</span>: <span id="reRope">0</span>/4</p>
-<button class="pres-btn" onclick="adjRE('rope',1)" data-lv3="Lv3 +1">Lv3 +1</button>
-<button class="pres-btn" onclick="adjRE('rope',0.5)" data-lv2="Lv2以下 +0.5">Lv2以下 +0.5</button>
-<button class="pres-btn" onclick="adjRE('rope',-0.5)" data-cancel="取消 -0.5">取消 -0.5</button>
+<div class="re-btns">
+<button class="pres-btn" onclick="adjRE('rope',1)" data-lv3="">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('rope',0.5)" data-lv2="">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('rope',-0.5)" data-cancel="">取消 -0.5</button>
+</div>
+</div>
 </div>
 
 <div id="reSenior" style="display:none">
+<div class="re-section">
 <p><span id="powerLabelS">Power Moves</span> <span id="currentLabel1S">現在</span>: <span id="rePowerS">0</span>/6</p>
-<button class="pres-btn" onclick="adjRE('power',1,'senior')" data-lv3="Lv3 +1">Lv3 +1</button>
-<button class="pres-btn" onclick="adjRE('power',0.5,'senior')" data-lv2="Lv2以下 +0.5">Lv2以下 +0.5</button>
-<button class="pres-btn" onclick="adjRE('power',-0.5,'senior')" data-cancel="取消 -0.5">取消 -0.5</button>
-
-<p><span id="multiLabelS">Multiples</span> <span id="currentLabel2S">現在</span>: <span id="reMultiS">0</span>/6</p>
-<button class="pres-btn" onclick="adjRE('multi',1,'senior')" data-lv3="Lv3 +1">Lv3 +1</button>
-<button class="pres-btn" onclick="adjRE('multi',0.5,'senior')" data-lv2="Lv2以下 +0.5">Lv2以下 +0.5</button>
-<button class="pres-btn" onclick="adjRE('multi',-0.5,'senior')" data-cancel="取消 -0.5">取消 -0.5</button>
-
-<p><span id="ropeLabelS">Rope Control</span> <span id="currentLabel2S">現在</span>: <span id="reRopeS">0</span>/6</p>
-<button class="pres-btn" onclick="adjRE('rope',1,'senior')" data-lv3="Lv3 +1">Lv3 +1</button>
-<button class="pres-btn" onclick="adjRE('rope',0.5,'senior')" data-lv2="Lv2以下 +0.5">Lv2以下 +0.5</button>
-<button class="pres-btn" onclick="adjRE('rope',-0.5,'senior')" data-cancel="取消 -0.5">取消 -0.5</button>
+<div class="re-btns">
+<button class="pres-btn" onclick="adjRE('power',1,'senior')" data-lv3="">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('power',0.5,'senior')" data-lv2="">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('power',-0.5,'senior')" data-cancel="">取消 -0.5</button>
+</div>
 </div>
 
-<button onclick="resetRE()" id="resetBtn4">リセット</button>
-<div class="nav-clear"></div>
-<button class="nav-btn nav-left" onclick="next(3)" id="backBtn4">戻る</button>
-<button class="nav-btn nav-right" onclick="next(5)" id="nextBtn4">次へ</button>
-<div class="nav-clear"></div>
+<div class="re-section">
+<p><span id="multiLabelS">Multiples</span> <span id="currentLabel2S">現在</span>: <span id="reMultiS">0</span>/6</p>
+<div class="re-btns">
+<button class="pres-btn" onclick="adjRE('multi',1,'senior')" data-lv3="">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('multi',0.5,'senior')" data-lv2="">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('multi',-0.5,'senior')" data-cancel="">取消 -0.5</button>
+</div>
+</div>
+
+<div class="re-section">
+<p><span id="ropeLabelS">Rope Control</span> <span id="currentLabel3S">現在</span>: <span id="reRopeS">0</span>/6</p>
+<div class="re-btns">
+<button class="pres-btn" onclick="adjRE('rope',1,'senior')" data-lv3="">Lv3 +1</button>
+<button class="pres-btn" onclick="adjRE('rope',0.5,'senior')" data-lv2="">Lv2以下 +0.5</button>
+<button class="pres-btn" onclick="adjRE('rope',-0.5,'senior')" data-cancel="">取消 -0.5</button>
+</div>
+</div>
+</div>
+
+<button class="reset-btn" onclick="resetRE()" id="resetBtn4">リセット</button>
+<div class="nav-buttons">
+<button class="nav-btn" onclick="next(3)" id="backBtn4">戻る</button>
+<button class="nav-btn" onclick="next(5)" id="nextBtn4">次へ</button>
+</div>
 </div>
 
 <!-- Step 5: Final Score -->
 <div id="s5" class="section">
 <h3 id="h5">🏁 Final Score</h3>
 <div class="result-score" id="result">0.00</div>
-<button onclick="location.reload()" id="newScoreBtn">新しく採点する</button>
+<button class="nav-btn" style="width:calc(100% - 8px);" onclick="location.reload()" id="newScoreBtn">新しく採点する</button>
 </div>
 
 </div>
 
 <script>
-// video
 const v=document.getElementById("video");
 videoUpload.onchange=e=>v.src=URL.createObjectURL(e.target.files[0]);
 
-// Language toggle
 function toggleLangMenu(){
   document.getElementById('langMenu').classList.toggle('show');
 }
@@ -243,7 +539,6 @@ document.addEventListener('click', function(e){
   }
 });
 
-// Language data
 const translations = {
   ja: {
     name: '日本語',
@@ -300,7 +595,7 @@ const translations = {
     juniorTab: 'Junior 4 Counts',
     seniorTab: 'Senior 6 Counts',
     lv3: 'Lv3 +1',
-    lv2: 'Lv2 or less +0.5',
+    lv2: 'Lv2≤ +0.5',
     cancel: 'Cancel -0.5',
     resetBtn: 'Reset',
     backBtn: 'Back',
@@ -331,7 +626,7 @@ const translations = {
     juniorTab: '少年组 4次',
     seniorTab: '高级组 6次',
     lv3: 'Lv3 +1',
-    lv2: 'Lv2及以下 +0.5',
+    lv2: 'Lv2≤ +0.5',
     cancel: '取消 -0.5',
     resetBtn: '重置',
     backBtn: '返回',
@@ -362,7 +657,7 @@ const translations = {
     juniorTab: '주니어 4카운트',
     seniorTab: '시니어 6카운트',
     lv3: 'Lv3 +1',
-    lv2: 'Lv2 이하 +0.5',
+    lv2: 'Lv2≤ +0.5',
     cancel: '취소 -0.5',
     resetBtn: '리셋',
     backBtn: '뒤로',
@@ -390,7 +685,7 @@ const translations = {
     multiLabel: 'Multiples',
     ropeLabel: 'Rope Control',
     currentLabel: 'الحالي',
-    juniorTab: 'المبتدئين 4 عد',
+    juniorTab: 'المبت',
     seniorTab: 'المتقدمين 6 عد',
     lv3: 'Lv3 +1',
     lv2: 'Lv2 أو أقل +0.5',
