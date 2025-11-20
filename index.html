@@ -323,7 +323,7 @@ input[type="file"] {
 /* Reset Button */
 .reset-btn {
   display: block;
-  width: calc(100% - 8px);
+  width: calc(35% - 8px);
   margin: 16px auto;
   background: #8B0000;
   color: white;
@@ -453,7 +453,7 @@ input[type="file"] {
 
 <div id="reJunior">
 <div class="re-section">
-<p><span id="powerLabel">Power Moves</span> <span id="currentLabel1">現在</span>: <span id="rePower">0</span>/4</p>
+<p><span id="powerLabel">Power Moves</span> <span id="currentLabel1"></span>: <span id="rePower">0</span>/4</p>
 <div class="re-btns">
 <button class="pres-btn" onclick="adjRE('power',1)" data-lv3="">Lv3 +1</button>
 <button class="pres-btn" onclick="adjRE('power',0.5)" data-lv2="">Lv2以下 +0.5</button>
@@ -462,7 +462,7 @@ input[type="file"] {
 </div>
 
 <div class="re-section">
-<p><span id="multiLabel">Multiples</span> <span id="currentLabel2">現在</span>: <span id="reMulti">0</span>/4</p>
+<p><span id="multiLabel">Multiples</span> <span id="currentLabel2"></span>: <span id="reMulti">0</span>/4</p>
 <div class="re-btns">
 <button class="pres-btn" onclick="adjRE('multi',1)" data-lv3="">Lv3 +1</button>
 <button class="pres-btn" onclick="adjRE('multi',0.5)" data-lv2="">Lv2以下 +0.5</button>
@@ -471,7 +471,7 @@ input[type="file"] {
 </div>
 
 <div class="re-section">
-<p><span id="ropeLabel">Rope Control</span> <span id="currentLabel3">現在</span>: <span id="reRope">0</span>/4</p>
+<p><span id="ropeLabel">Rope Control</span> <span id="currentLabel3"></span>: <span id="reRope">0</span>/4</p>
 <div class="re-btns">
 <button class="pres-btn" onclick="adjRE('rope',1)" data-lv3="">Lv3 +1</button>
 <button class="pres-btn" onclick="adjRE('rope',0.5)" data-lv2="">Lv2以下 +0.5</button>
@@ -482,7 +482,7 @@ input[type="file"] {
 
 <div id="reSenior" style="display:none">
 <div class="re-section">
-<p><span id="powerLabelS">Power Moves</span> <span id="currentLabel1S">現在</span>: <span id="rePowerS">0</span>/6</p>
+<p><span id="powerLabelS">Power Moves</span> <span id="currentLabel1S"></span>: <span id="rePowerS">0</span>/6</p>
 <div class="re-btns">
 <button class="pres-btn" onclick="adjRE('power',1,'senior')" data-lv3="">Lv3 +1</button>
 <button class="pres-btn" onclick="adjRE('power',0.5,'senior')" data-lv2="">Lv2以下 +0.5</button>
@@ -491,7 +491,7 @@ input[type="file"] {
 </div>
 
 <div class="re-section">
-<p><span id="multiLabelS">Multiples</span> <span id="currentLabel2S">現在</span>: <span id="reMultiS">0</span>/6</p>
+<p><span id="multiLabelS">Multiples</span> <span id="currentLabel2S"></span>: <span id="reMultiS">0</span>/6</p>
 <div class="re-btns">
 <button class="pres-btn" onclick="adjRE('multi',1,'senior')" data-lv3="">Lv3 +1</button>
 <button class="pres-btn" onclick="adjRE('multi',0.5,'senior')" data-lv2="">Lv2以下 +0.5</button>
@@ -500,7 +500,7 @@ input[type="file"] {
 </div>
 
 <div class="re-section">
-<p><span id="ropeLabelS">Rope Control</span> <span id="currentLabel3S">現在</span>: <span id="reRopeS">0</span>/6</p>
+<p><span id="ropeLabelS">Rope Control</span> <span id="currentLabel3S"></span>: <span id="reRopeS">0</span>/6</p>
 <div class="re-btns">
 <button class="pres-btn" onclick="adjRE('rope',1,'senior')" data-lv3="">Lv3 +1</button>
 <button class="pres-btn" onclick="adjRE('rope',0.5,'senior')" data-lv2="">Lv2以下 +0.5</button>
@@ -559,7 +559,6 @@ const translations = {
     powerLabel: 'Power Moves',
     multiLabel: 'Multiples',
     ropeLabel: 'Rope Control',
-    currentLabel: '現在',
     juniorTab: 'ジュニア 4カウント',
     seniorTab: 'シニア 6カウント',
     lv3: 'Lv3 +1',
@@ -590,7 +589,6 @@ const translations = {
     powerLabel: 'Power Moves',
     multiLabel: 'Multiples',
     ropeLabel: 'Rope Control',
-    currentLabel: 'Current',
     juniorTab: 'Junior 4 Counts',
     seniorTab: 'Senior 6 Counts',
     lv3: 'Lv3 +1',
@@ -621,7 +619,6 @@ const translations = {
     powerLabel: 'Power Moves',
     multiLabel: 'Multiples',
     ropeLabel: 'Rope Control',
-    currentLabel: '当前',
     juniorTab: '少年组 4次',
     seniorTab: '高级组 6次',
     lv3: 'Lv3 +1',
@@ -652,7 +649,6 @@ const translations = {
     powerLabel: 'Power Moves',
     multiLabel: 'Multiples',
     ropeLabel: 'Rope Control',
-    currentLabel: '현재',
     juniorTab: '주니어 4카운트',
     seniorTab: '시니어 6카운트',
     lv3: 'Lv3 +1',
@@ -683,7 +679,6 @@ const translations = {
     powerLabel: 'Power Moves',
     multiLabel: 'Multiples',
     ropeLabel: 'Rope Control',
-    currentLabel: 'الحالي',
     juniorTab: 'المبت',
     seniorTab: 'المتقدمين 6 عد',
     lv3: 'Lv3 +1',
